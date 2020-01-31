@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/send_sos"
-        android:title="Send SOS Message"/>
+        android:title="Send SOS Message"
+        android:visible="false"/>
+
+    <item
+        android:id="@+id/search_mall"
+        android:icon="@drawable/ic_search_black_24dp"
+        android:title="Send SOS Message"
+        app:showAsAction="always"/>
 
 </menu>

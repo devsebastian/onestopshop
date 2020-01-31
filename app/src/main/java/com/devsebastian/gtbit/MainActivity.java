@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -152,7 +154,8 @@ public class MainActivity extends AppCompatActivity {
 //                                dialog.show();
 //                            }
 //                        });
-
+                    case R.id.search_mall:
+                        startActivity(new Intent(MainActivity.this,SearchMallActivity.class));
                 }
 
                 return false;
@@ -378,4 +381,5 @@ public class MainActivity extends AppCompatActivity {
 
         return dialog;
     }
+
 }

@@ -1,6 +1,7 @@
 package com.devsebastian.gtbit;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +58,7 @@ public class SearchMallAdapter extends RecyclerView.Adapter<SearchMallAdapter.My
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder holder, int position) {
 
-        String mallId = dataSet.get(position);
+        final String mallId = dataSet.get(position);
 
         databaseReference.child("malls").child(mallId).addValueEventListener(new ValueEventListener() {
             @Override
@@ -75,7 +76,7 @@ public class SearchMallAdapter extends RecyclerView.Adapter<SearchMallAdapter.My
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context,"Gaand kyu nhi marate",Toast.LENGTH_LONG).show();
+                context.startActivity(new Intent(context,SearchMallActivity.class).putExtra("mallId",mallId));
             }
         });
 
