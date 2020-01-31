@@ -11,11 +11,13 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -49,6 +51,11 @@ public class MainActivity extends AppCompatActivity {
 
     private FusedLocationProviderClient client;
     RecyclerView recyclerView;
+
+
+    LinearLayout layoutBottomSheet;
+
+    BottomSheetBehavior sheetBehavior;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, final Intent data) {
@@ -86,10 +93,46 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        findViewById(R.id.locate_me_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, MapActivity.class));
+            }
+        });
+
+        findViewById(R.id.blackscreen).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
+        findViewById(R.id.blackscreen).setVisibility(View.GONE);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().invalidateOptionsMenu();
         toolbar.inflateMenu(R.menu.toolbar_menu);
+
+        layoutBottomSheet = findViewById(R.id.bottom_sheet);
+        sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet);
+        sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View view, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        findViewById(R.id.blackscreen).setVisibility(View.GONE);
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        findViewById(R.id.blackscreen).setVisibility(View.VISIBLE);
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View view, float v) {
+
+            }
+        });
 
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -178,8 +221,10 @@ public class MainActivity extends AppCompatActivity {
                             databaseReference.child("parkedLocation").child("1").child("lat").setValue(userLat);
                             databaseReference.child("parkedLocation").child("1").child("lng").setValue(userLng);
 
-                            Dialog dialog = onCreateDialogEdited("Parking spot saved");
-                            dialog.show();
+//                            Dialog dialog = onCreateDialogEdited("Parking spot saved");
+//                            dialog.show();
+
+                            toggleBottomSheet();
                         }
                     }
                 });
@@ -192,8 +237,10 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.exists()) {
                     lastSavedSpotBtn.setVisibility(View.GONE);
-                } else
+                } else {
                     lastSavedSpotBtn.setVisibility(View.VISIBLE);
+                }
+
             }
 
             @Override
@@ -215,8 +262,17 @@ public class MainActivity extends AppCompatActivity {
 
 
         stuff("1");
+
     }
 
+
+    public void toggleBottomSheet() {
+        if (sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+            sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        } else {
+            sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        }
+    }
 
     void stuff(String id) {
         final FeedAdapter feedAdapter = new FeedAdapter(this, new ArrayList<FeedRow>());
