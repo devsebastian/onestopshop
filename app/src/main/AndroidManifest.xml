@@ -19,7 +19,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RecentBillsActivity"></activity>
+        <activity android:name=".SearchMallActivity"></activity>
+        <activity android:name=".RecentBillsActivity" />
         <activity android:name=".BillingActivity">
             <intent-filter android:label="dev">
                 <action android:name="android.intent.action.VIEW" />
