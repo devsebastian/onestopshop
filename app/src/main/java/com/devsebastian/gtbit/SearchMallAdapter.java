@@ -76,7 +76,7 @@ public class SearchMallAdapter extends RecyclerView.Adapter<SearchMallAdapter.My
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                context.startActivity(new Intent(context,SearchMallActivity.class).putExtra("mallId",mallId));
+                context.startActivity(new Intent(context,SearchResultActivity.class).putExtra("mallId",mallId));
             }
         });
 

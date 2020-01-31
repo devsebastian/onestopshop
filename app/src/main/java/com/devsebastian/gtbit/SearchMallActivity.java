@@ -7,6 +7,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,20 +41,26 @@ public class SearchMallActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String queryTxt) {
-                Query query = databaseReference.child("malls").orderByChild("name").equalTo( queryTxt + "\uf8ff");
-                query.addValueEventListener(valueEventListener);
+                Query query1 = databaseReference.child("malls").orderByChild("name").startAt( queryTxt ).endAt(queryTxt + "\uf8ff");
+                query1.addValueEventListener(valueEventListener);
+                Log.d("Query", "onQueryTextSubmit: " + queryTxt);
 
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Query query = databaseReference.child("malls").orderByChild("name").equalTo( newText + "\uf8ff");
-                query.addValueEventListener(valueEventListener);
+                Query query1 = databaseReference.child("malls").orderByChild("name").startAt( newText ).endAt(newText + "\uf8ff");
+                query1.addValueEventListener(valueEventListener);
+                Log.d("Query", "onQueryTextSubmit: " + newText);
 
                 return false;
             }
         });
+
+        if(searchView.getQuery().toString().isEmpty()){
+            databaseReference.child("malls").addValueEventListener(valueEventListener);
+        }
     }
 
     ValueEventListener valueEventListener = new ValueEventListener() {
@@ -60,6 +69,7 @@ public class SearchMallActivity extends AppCompatActivity {
             mallIds = new ArrayList<>();
             for(DataSnapshot snapshot : dataSnapshot.getChildren()){
                 mallIds.add(snapshot.getKey());
+                Log.d("SearchResult", "onDataChange: MAlL id " + snapshot.getKey());
             }
             adapter.setIterms(mallIds);
             adapter.notifyDataSetChanged();
