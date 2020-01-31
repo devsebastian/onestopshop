@@ -41,7 +41,7 @@ public class SearchMallActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String queryTxt) {
-                Query query1 = databaseReference.child("malls").orderByChild("name").startAt( queryTxt ).endAt(queryTxt + "\uf8ff");
+                Query query1 = databaseReference.child("malls").orderByChild("name").startAt( queryTxt.toLowerCase() ).endAt(queryTxt.toLowerCase() + "\uf8ff");
                 query1.addValueEventListener(valueEventListener);
                 Log.d("Query", "onQueryTextSubmit: " + queryTxt);
 
@@ -50,7 +50,7 @@ public class SearchMallActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Query query1 = databaseReference.child("malls").orderByChild("name").startAt( newText ).endAt(newText + "\uf8ff");
+                Query query1 = databaseReference.child("malls").orderByChild("name").startAt( newText.toLowerCase() ).endAt(newText.toLowerCase() + "\uf8ff");
                 query1.addValueEventListener(valueEventListener);
                 Log.d("Query", "onQueryTextSubmit: " + newText);
 

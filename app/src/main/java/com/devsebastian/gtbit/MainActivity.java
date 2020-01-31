@@ -101,6 +101,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        databaseReference.child("mkc").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists())
+                    Toast.makeText(MainActivity.this,"Help Help", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         findViewById(R.id.locate_me_btn).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -194,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 final long date = System.currentTimeMillis();
+                databaseReference.child("mkc").setValue(true);
 
                 client.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
                     @Override
