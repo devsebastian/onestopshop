@@ -42,7 +42,7 @@
                     android:layout_width="match_parent"
                     android:scaleType="centerCrop"
                     android:layout_height="220dp"
-                    android:src="@mipmap/adidas" />
+                    android:src="@mipmap/ham" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"
@@ -105,7 +105,7 @@
                 android:layout_weight="1" />
 
             <ImageView
-                android:id="@+id/profile"
+                android:id="@+id/sos_btn"
                 android:layout_width="0dp"
                 android:tint="@android:color/white"
 
@@ -121,6 +121,8 @@
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:foregroundGravity="center"
+        android:scaleType="fitCenter"
         android:clickable="true"
         android:layout_gravity="bottom|center"
         android:tint="@android:color/white"

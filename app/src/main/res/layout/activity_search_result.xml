@@ -42,7 +42,7 @@
                     android:layout_width="match_parent"
                     android:scaleType="centerCrop"
                     android:layout_height="220dp"
-                    android:src="@mipmap/adidas" />
+                    android:src="@mipmap/ham" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"

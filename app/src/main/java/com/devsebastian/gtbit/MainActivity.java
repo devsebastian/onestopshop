@@ -7,10 +7,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -46,12 +45,10 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     int i = 0;
     private DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-    ImageView saveLocationBtn, lastSavedSpotBtn, profileBtn, recentBills;
+    ImageView saveLocationBtn, lastSavedSpotBtn, sosBtn, recentBills;
 
     String shopName;
-
     private Double userLat = 0d, userLng = 0d;
-
     private FusedLocationProviderClient client;
     RecyclerView recyclerView;
 
@@ -97,12 +94,41 @@ public class MainActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+
+    private void fadeIn(View v) {
+        v.setAlpha(0f);
+        v.setVisibility(View.VISIBLE);
+        v.animate()
+                .alpha(0.7f)
+                .setDuration(200)
+                .setListener(null);
+    }
+
+    private void fadeOut(final View v) {
+        final int delay = 200;
+        v.setAlpha(0.7f);
+        v.animate()
+                .alpha(0f)
+                .setDuration(delay)
+                .setListener(null);
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Do something after 5s = 5000ms
+                v.setVisibility(View.GONE);
+            }
+        }, delay);
+
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        databaseReference.child("mkc").addValueEventListener(new ValueEventListener() {
+//        databaseReference.child("alarm").addValueEventListener(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 //                if(dataSnapshot.exists()) {
@@ -111,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
 //                    Toast.makeText(MainActivity.this, "Help Help", Toast.LENGTH_LONG).show();
 //                }
 //            }
-//
+//w
 //            @Override
 //            public void onCancelled(@NonNull DatabaseError databaseError) {
 //
@@ -125,12 +151,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        findViewById(R.id.blackscreen).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-//            }
-//        });
+        findViewById(R.id.blackscreen).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            }
+        });
         findViewById(R.id.blackscreen).setVisibility(View.GONE);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -138,47 +164,31 @@ public class MainActivity extends AppCompatActivity {
 
         layoutBottomSheet = findViewById(R.id.bottom_sheet);
         sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet);
-//        sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-//            @Override
-//            public void onStateChanged(@NonNull View view, int newState) {
-//                switch (newState) {
-//                    case BottomSheetBehavior.STATE_COLLAPSED:
-//                        findViewById(R.id.blackscreen).setVisibility(View.GONE);
-//                        break;
-//                    case BottomSheetBehavior.STATE_EXPANDED:
-//                        findViewById(R.id.blackscreen).setVisibility(View.VISIBLE);
-//                        break;
-//                }
-//            }
-//
-//            @Override
-//            public void onSlide(@NonNull View view, float v) {
-//
-//            }
-//        });
+
+        sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View view, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        fadeOut(findViewById(R.id.blackscreen));
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        fadeIn(findViewById(R.id.blackscreen));
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View view, float v) {
+
+            }
+        });
 
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.send_sos:
-//                        final long date = System.currentTimeMillis();
-//
-//                        client.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
-//                            @Override
-//                            public void onSuccess(Location location) {
-//                                databaseReference.child("sosDetails").child("1").child("date").setValue(date);
-//                                databaseReference.child("sosDetails").child("1").child("lat").setValue(location.getLatitude());
-//                                databaseReference.child("sosDetails").child("1").child("lng").setValue(location.getLongitude());
-//
-//                                Dialog dialog = onCreateDialogSOS();
-//                                dialog.show();
-//                            }
-//                        });
-                    case R.id.search_mall:
-                        startActivity(new Intent(MainActivity.this,SearchMallActivity.class));
-                }
-
+                if (item.getItemId() == R.id.search_mall)
+                    startActivity(new Intent(MainActivity.this, SearchMallActivity.class));
                 return false;
             }
         });
@@ -196,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
 
         saveLocationBtn = findViewById(R.id.save_location_btn);
         lastSavedSpotBtn = findViewById(R.id.find_last_spot);
-        profileBtn = findViewById(R.id.profile);
+        sosBtn = findViewById(R.id.sos_btn);
         recentBills = findViewById(R.id.recent_bills);
 
         recentBills.setOnClickListener(new View.OnClickListener() {
@@ -206,11 +216,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        profileBtn.setOnClickListener(new View.OnClickListener() {
+        sosBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final long date = System.currentTimeMillis();
-                databaseReference.child("mkc").setValue(true);
+                databaseReference.child("alarm").setValue(true);
 
                 client.getLastLocation().addOnSuccessListener(new OnSuccessListener<Location>() {
                     @Override
@@ -219,12 +229,9 @@ public class MainActivity extends AppCompatActivity {
                         databaseReference.child("sosDetails").child("1").child("lat").setValue(location.getLatitude());
                         databaseReference.child("sosDetails").child("1").child("lng").setValue(location.getLongitude());
 
-                        Dialog dialog = onCreateDialogSOS();
-                        dialog.show();
+                        startActivity(new Intent(MainActivity.this, SOSActivity.class));
                     }
                 });
-
-//                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
             }
         });
 
@@ -245,10 +252,6 @@ public class MainActivity extends AppCompatActivity {
                             userLng = location.getLongitude();
                             databaseReference.child("parkedLocation").child("1").child("lat").setValue(userLat);
                             databaseReference.child("parkedLocation").child("1").child("lng").setValue(userLng);
-
-//                            Dialog dialog = onCreateDialogEdited("Parking spot saved");
-//                            dialog.show();
-
                             toggleBottomSheet();
                         }
                     }
@@ -289,7 +292,6 @@ public class MainActivity extends AppCompatActivity {
         stuff("1");
 
     }
-
 
     public void toggleBottomSheet() {
         if (sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
@@ -358,50 +360,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         recyclerView.setAdapter(feedAdapter);
-    }
-
-    private Dialog onCreateDialogEdited(String text) {
-
-        final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.custom_dialog);
-        dialog.setCancelable(true);
-
-        TextView textView = dialog.findViewById(R.id.update_tv);
-        textView.setText(text);
-
-        Button continueBtn = dialog.findViewById(R.id.check_btn);
-        continueBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                startActivity(new Intent(MainActivity.this, MapActivity.class));
-            }
-        });
-
-        return dialog;
-    }
-
-    private Dialog onCreateDialogSOS() {
-
-        final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.custom_dialog);
-        dialog.setCancelable(true);
-
-        ImageView imageView = dialog.findViewById(R.id.comment_tv);
-        imageView.setImageDrawable(getResources().getDrawable(R.drawable.ic_sos));
-
-        TextView textView = dialog.findViewById(R.id.update_tv);
-        textView.setText("SOS Sent");
-
-        Button continueBtn = dialog.findViewById(R.id.check_btn);
-        continueBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-
-        return dialog;
     }
 
 }
