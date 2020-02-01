@@ -60,7 +60,8 @@
         android:layout_gravity="bottom"
         android:elevation="12dp"
         android:backgroundTint="@color/colorPrimary"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -125,7 +126,8 @@
         android:layout_gravity="bottom|center"
         android:tint="@android:color/white"
         android:layout_margin="28dp"
-        android:src="@drawable/barcode_scan" />
+        android:src="@drawable/barcode_scan"
+        android:visibility="gone"/>
 
     <include layout="@layout/bottom_sheet" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

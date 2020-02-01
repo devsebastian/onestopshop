@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -101,18 +102,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        databaseReference.child("mkc").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists())
-                    Toast.makeText(MainActivity.this,"Help Help", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+//        databaseReference.child("mkc").addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if(dataSnapshot.exists()) {
+//                    MediaPlayer mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.ring);
+//                    mediaPlayer.start();
+//                    Toast.makeText(MainActivity.this, "Help Help", Toast.LENGTH_LONG).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
         findViewById(R.id.locate_me_btn).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,12 +125,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.blackscreen).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-            }
-        });
+//        findViewById(R.id.blackscreen).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+//            }
+//        });
         findViewById(R.id.blackscreen).setVisibility(View.GONE);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -134,24 +138,24 @@ public class MainActivity extends AppCompatActivity {
 
         layoutBottomSheet = findViewById(R.id.bottom_sheet);
         sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet);
-        sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            @Override
-            public void onStateChanged(@NonNull View view, int newState) {
-                switch (newState) {
-                    case BottomSheetBehavior.STATE_COLLAPSED:
-                        findViewById(R.id.blackscreen).setVisibility(View.GONE);
-                        break;
-                    case BottomSheetBehavior.STATE_EXPANDED:
-                        findViewById(R.id.blackscreen).setVisibility(View.VISIBLE);
-                        break;
-                }
-            }
-
-            @Override
-            public void onSlide(@NonNull View view, float v) {
-
-            }
-        });
+//        sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+//            @Override
+//            public void onStateChanged(@NonNull View view, int newState) {
+//                switch (newState) {
+//                    case BottomSheetBehavior.STATE_COLLAPSED:
+//                        findViewById(R.id.blackscreen).setVisibility(View.GONE);
+//                        break;
+//                    case BottomSheetBehavior.STATE_EXPANDED:
+//                        findViewById(R.id.blackscreen).setVisibility(View.VISIBLE);
+//                        break;
+//                }
+//            }
+//
+//            @Override
+//            public void onSlide(@NonNull View view, float v) {
+//
+//            }
+//        });
 
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
